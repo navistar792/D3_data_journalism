@@ -16,6 +16,11 @@ const file = "/assets/data/data.csv";
 //Read the data
 d3.csv(file).then(function(data) {
     console.log(data);
+    // Format the data
+    data.forEach(function(data) {
+        data.healthcareLow = +data.healthcareLow;
+        data.poverty = +data.poverty;
+        });
     var hclow = data.map(d => d.healthcareLow);
     console.log(hclow);
     var pov = data.map(d => d.poverty);
@@ -23,42 +28,66 @@ d3.csv(file).then(function(data) {
     var state = data.map(d => d.abbr);
     console.log(state);
 
+    // verifying format for axes
+    console.log(d3.max(data, d => d.healthcareLow));
+    console.log(d3.min(data, d => d.healthcareLow));
+    console.log(d3.max(data, d => d.poverty));
+    console.log(d3.min(data, d => d.poverty));
+
+
+
     // Add X axis
     const x = d3.scaleLinear()
-    .domain([8, 24])
-    .range([ 0, width ]);
-    svg.append("g")
-    .attr("transform", `translate(0, ${height})`)
-    .call(d3.axisBottom(x));
+        .domain([d3.min(data, d => d.poverty)-1, d3.max(data, d => d.poverty)+1])
+        .range([ 0, width]);
+        svg.append("g")
+        .attr("transform", `translate(0, ${height})`)
+        .call(d3.axisBottom(x));
 
     // Add Y axis
     const y = d3.scaleLinear()
-    .domain([2, 26])
-    .range([ height, 0]);
-    svg.append("g")
-    .call(d3.axisLeft(y));
+        .domain([d3.min(data, d => d.healthcareLow)-1, d3.max(data, d => d.healthcareLow)+1])
+        .range([ height, 0]);
+        svg.append("g")
+        .call(d3.axisLeft(y));
 
     // Add dots
     svg.append('g')
-    .selectAll("dot")
-    .data(data)
-    .join("circle")
-    .attr("cx", function (d) { return x(d.poverty); } )
-    .attr("cy", function (d) { return y(d.healthcareLow); } )
+        .selectAll("dot")
+        .data(data)
+        .join("circle")
+        .attr("cx", function (d) { return x(d.poverty); } )
+        .attr("cy", function (d) { return y(d.healthcareLow); } )
         .attr("r", 12)
         .style("fill", "#6699cc")
     
-    svg.selectAll("text")
+    svg.selectAll(".label")
         .data(data)
         .enter()
         .append("text")
         .style("font-size", "10px")
-        .attr("text-anchor", "middle")
+        .attr("text-anchor", "middle", "label")
         // .attr("fill", "white")
         // Add your code below this line
                 .text((d) => (d.abbr))
                 .attr("x", function (d) { return x(d.poverty);})
                 .attr("y", function (d) { return y(d.healthcareLow); })   
         // Add your code above this line    
+    
+    svg.append("text")
+        .attr("transform", `translate(${width / 2}, ${height + margin.top + 20})`)
+        .attr("text-anchor", "middle")
+        .attr("font-size", "16px")
+        .attr("fill", "green")
+        .text("poverty");
+    
+    // Create axes labels
+    svg.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left + 40)
+      .attr("x", 0 - (height / 2))
+      .attr("dy", "1em")
+      .attr("class", "axisText")
+      .text("healthcareLow");
 
 });
