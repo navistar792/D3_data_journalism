@@ -1,7 +1,7 @@
 // set the dimensions and margins of the graph
-const margin = {top: 10, right: 30, bottom: 30, left: 60},
-        width = 800 - margin.left - margin.right,
-        height = 550 - margin.top - margin.bottom;
+const margin = {top: 20, right: 40, bottom: 60, left: 100},
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
     
 // append the svg object to the body of the page
 const svg = d3.select("#scatter")
@@ -65,9 +65,9 @@ d3.csv(file).then(function(data) {
         .data(data)
         .enter()
         .append("text")
-        .style("font-size", "10px")
+        .attr("font-size", "10px")
+        .attr("class", "stateText")
         .attr("text-anchor", "middle", "label")
-        // .attr("fill", "white")
         // Add your code below this line
                 .text((d) => (d.abbr))
                 .attr("x", function (d) { return x(d.poverty);})
@@ -86,8 +86,10 @@ d3.csv(file).then(function(data) {
       .attr("transform", "rotate(-90)")
       .attr("y", 0 - margin.left + 40)
       .attr("x", 0 - (height / 2))
+      .attr("text-anchor", "middle")
       .attr("dy", "1em")
       .attr("class", "axisText")
+      //.attr("stroke", "stateCircle")
       .text("healthcareLow");
 
 });
