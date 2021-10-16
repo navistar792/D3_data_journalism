@@ -18,10 +18,10 @@ d3.csv(file).then(function(data) {
     console.log(data);
     // Format the data
     data.forEach(function(data) {
-        data.healthcareLow = +data.healthcareLow;
+        data.obesity = +data.obesity;
         data.poverty = +data.poverty;
         });
-    var hclow = data.map(d => d.healthcareLow);
+    var hclow = data.map(d => d.obesity);
     console.log(hclow);
     var pov = data.map(d => d.poverty);
     console.log(pov);
@@ -29,8 +29,8 @@ d3.csv(file).then(function(data) {
     console.log(state);
 
     // verifying format for axes
-    console.log(d3.max(data, d => d.healthcareLow));
-    console.log(d3.min(data, d => d.healthcareLow));
+    console.log(d3.max(data, d => d.obesity));
+    console.log(d3.min(data, d => d.obesity));
     console.log(d3.max(data, d => d.poverty));
     console.log(d3.min(data, d => d.poverty));
 
@@ -46,7 +46,7 @@ d3.csv(file).then(function(data) {
 
     // Add Y axis
     const y = d3.scaleLinear()
-        .domain([d3.min(data, d => d.healthcareLow)-1, d3.max(data, d => d.healthcareLow)+1])
+        .domain([d3.min(data, d => d.obesity)-1, d3.max(data, d => d.obesity)+1])
         .range([ height, 0]);
         svg.append("g")
         .call(d3.axisLeft(y));
@@ -57,7 +57,7 @@ d3.csv(file).then(function(data) {
         .data(data)
         .join("circle")
         .attr("cx", function (d) { return x(d.poverty); } )
-        .attr("cy", function (d) { return y(d.healthcareLow); } )
+        .attr("cy", function (d) { return y(d.obesity); } )
         .attr("r", 12)
         .style("fill", "#6699cc")
     
@@ -71,7 +71,7 @@ d3.csv(file).then(function(data) {
         // Add your code below this line
                 .text((d) => (d.abbr))
                 .attr("x", function (d) { return x(d.poverty);})
-                .attr("y", function (d) { return y(d.healthcareLow); })   
+                .attr("y", function (d) { return y(d.obesity); })   
         // Add your code above this line    
     
     svg.append("text")
@@ -90,6 +90,6 @@ d3.csv(file).then(function(data) {
       .attr("dy", "1em")
       .attr("class", "axisText")
       //.attr("stroke", "stateCircle")
-      .text("healthcareLow");
+      .text("obesity");
 
 });
